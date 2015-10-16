@@ -1,12 +1,27 @@
 package net.sf.jsqlparser.expression;
 
+import java.util.Arrays;
+
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+
 /**
  * Extract value from date/time expression. The name stores the part - name 
  * to get from the following date/time expression.
  * @author tw
  */
-public class ExtractExpression implements Expression {
+public class ExtractExpression extends Function {
 	private String name;
+	
+	public ExtractExpression(String name, Expression expression) {
+		super();
+		this.name = name;
+		this.expression = expression;
+		this.setName("EXTRACT");
+		Expression ews = new ExpressionWithString(expression," FROM " + name);
+		ExpressionList exprList = new ExpressionList(Arrays.asList(ews));
+		this.setParameters(exprList);
+	}
+
 	private Expression expression;
 	
 	@Override
@@ -14,21 +29,15 @@ public class ExtractExpression implements Expression {
 		expressionVisitor.visit(this);
 	}
 
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+
+	
 
 	public Expression getExpression() {
 		return expression;
 	}
 
-	public void setExpression(Expression expression) {
-		this.expression = expression;
-	}
+	
 
 	@Override
 	public String toString() {

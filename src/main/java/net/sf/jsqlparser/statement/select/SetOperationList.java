@@ -40,9 +40,6 @@ public class SetOperationList implements SelectBody {
 		plainSelects = select;
 		operations = ops;
 
-		if (select.size() - 1 != ops.size()) {
-			throw new IllegalArgumentException("list sizes are not valid");
-		}
 	}
 
 	public Limit getLimit() {

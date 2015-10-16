@@ -6,6 +6,16 @@ Original project websites:
 
 * http://jsqlparser.sourceforge.net
 * http://sourceforge.net/projects/jsqlparser/
+* https://github.com/wumpz/JSqlParser
+
+##
+
+Fork for use in SparqlMap
+
+* includes deparser for postgresql
+* allows arbitrary functions of thy type functionname(expression somestring, expression2 somestring2 ......), for creating for example: substring(cast(col as TEXT) FROM 1)
+* removed cast and extract functions
+* broke the junit test system, but it worked before! 
 
 ## Extensions
 

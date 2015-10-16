@@ -31,6 +31,9 @@ public class OrExpression extends BinaryExpression {
 		setLeftExpression(leftExpression);
 		setRightExpression(rightExpression);
 	}
+	
+	public OrExpression() {
+	}
 
 	public void accept(ExpressionVisitor expressionVisitor) {
 		expressionVisitor.visit(this);

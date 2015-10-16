@@ -72,9 +72,7 @@ import net.sf.jsqlparser.expression.NullValue;
 import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.CaseExpression;
-import net.sf.jsqlparser.expression.CastExpression;
 import net.sf.jsqlparser.expression.AnalyticExpression;
-import net.sf.jsqlparser.expression.ExtractExpression;
 import net.sf.jsqlparser.expression.WhenClause;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
 import net.sf.jsqlparser.expression.AllComparisonExpression;
@@ -223,12 +221,10 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_TRUNCATE:"TRUNCATE">
 |   <K_DISTINCT:"DISTINCT">
 |   <K_INTERSECT:"INTERSECT">
-|   <K_CAST:"CAST">
 |   <K_EXCEPT:"EXCEPT">
 |   <K_MINUS:"MINUS">
 |   <K_OVER:"OVER">
 |   <K_PARTITION:"PARTITION">
-|   <K_EXTRACT:"EXTRACT">
 }
 
 
@@ -1438,8 +1434,6 @@ Expression PrimaryExpression():
 
 	| LOOKAHEAD(AnalyticExpression()) retval=AnalyticExpression()
 
-	| LOOKAHEAD(ExtractExpression()) retval=ExtractExpression()
-	
 	| LOOKAHEAD([ "+" | "-"] Function()) [ "+" | "-" { isInverse = true; }] retval=Function() 
 	
 	| LOOKAHEAD([	"+" | "-"] <S_DOUBLE>) 	[	"+" | "-" { tmp = "-"; }]  token=<S_DOUBLE> { retval = new DoubleValue(tmp+token.image); }
@@ -1449,8 +1443,6 @@ Expression PrimaryExpression():
 	| LOOKAHEAD(2) 	[ "+" | "-" { isInverse = true; }] retval=Column() 
 
 	| LOOKAHEAD(2) [ "+" | "-" { isInverse = true; }]  "(" retval=PrimaryExpression() ")" {retval = new Parenthesis(retval); }
-
-	| LOOKAHEAD(2) [ "+" | "-" { isInverse = true; }] retval=CastExpression()
 
 	| token=<S_CHAR_LITERAL> { retval = new StringValue(token.image); }
 
@@ -1493,44 +1485,8 @@ AnalyticExpression AnalyticExpression() :
 	}
 }
 
-ExtractExpression ExtractExpression() :
-{
-	ExtractExpression retval = new ExtractExpression();
-	Token token = null;
-	Expression expr = null;
-}
-{
-	<K_EXTRACT> 
-	"(" 
-		token=<S_IDENTIFIER> { retval.setName(token.image); } 
-		<K_FROM> 
-		expr=PrimaryExpression() { retval.setExpression(expr); }
-	")"
-	{
-		return retval;
-	}
-}
 
-CastExpression CastExpression():
-{
-	CastExpression retval = new CastExpression();
-	String typeName = null;
-	Expression expression = null;
-}
-{
-	<K_CAST>
-	"("
-	expression=SimpleExpression()
-	<K_AS>
-	typeName=RelObjectName()
-	")"
 
-    {
-	    retval.setLeftExpression(expression);
-	    retval.setTypeName(typeName);
-    	return retval;
-    }
-}
 
 Expression CaseWhenExpression():
 {

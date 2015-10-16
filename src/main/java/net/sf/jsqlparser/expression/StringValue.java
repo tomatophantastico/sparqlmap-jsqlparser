@@ -22,6 +22,7 @@
 
 package net.sf.jsqlparser.expression;
 
+
 /**
  * A string as in 'example_string'
  */
@@ -29,7 +30,7 @@ public class StringValue implements Expression {
 	private String value = "";
 
 	public StringValue(String escapedValue) {
-		// romoving "'" at the start and at the end
+		// removing "'" at the start and at the end
 		value = escapedValue.substring(1, escapedValue.length() - 1);
 	}
 
@@ -59,5 +60,16 @@ public class StringValue implements Expression {
 
 	public String toString() {
 		return "'" + value + "'";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof StringValue){
+			
+			if(((StringValue) obj).getValue().equals(value)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

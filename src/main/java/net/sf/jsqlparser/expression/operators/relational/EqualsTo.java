@@ -54,4 +54,6 @@ public class EqualsTo extends BinaryExpression {
 	public int getOldOracleJoinSyntax() {
 		return oldOracleJoinSyntax;
 	}
+	
+	
 }

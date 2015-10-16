@@ -31,6 +31,9 @@ public class AndExpression extends BinaryExpression {
 		setLeftExpression(leftExpression);
 		setRightExpression(rightExpression);
 	}
+	
+	public AndExpression() {
+	}
 
 	public void accept(ExpressionVisitor expressionVisitor) {
 		expressionVisitor.visit(this);

@@ -25,5 +25,12 @@ package net.sf.jsqlparser.statement.select;
 public interface SelectVisitor {
 	public void visit(PlainSelect plainSelect);
 	
+	/**
+	 * this is more a hack
+	 * @param sbs
+	 */
+	public void visit(SelectBodyString sbs);
+	
 	public void visit(SetOperationList setOpList);
+	
 }

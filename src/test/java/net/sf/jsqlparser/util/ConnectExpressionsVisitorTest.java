@@ -7,6 +7,8 @@ import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
 import net.sf.jsqlparser.expression.operators.arithmetic.Concat;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.SelectBodyString;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,6 +53,12 @@ public class ConnectExpressionsVisitorTest {
 			protected BinaryExpression createBinaryExpression() {
 				return new Concat();
 			}
+
+			@Override
+			public void visit(SelectBodyString sbs) {
+				// TODO Auto-generated method stub
+				
+			}
 		};
 		select.getSelectBody().accept(instance);
 		
@@ -66,6 +74,12 @@ public class ConnectExpressionsVisitorTest {
 			@Override
 			protected BinaryExpression createBinaryExpression() {
 				return new Addition();
+			}
+
+			@Override
+			public void visit(SelectBodyString sbs) {
+				// TODO Auto-generated method stub
+				
 			}
 		};
 		select.getSelectBody().accept(instance);

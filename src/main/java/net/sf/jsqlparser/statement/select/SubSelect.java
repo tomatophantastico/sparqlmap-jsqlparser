@@ -22,6 +22,9 @@
 
 package net.sf.jsqlparser.statement.select;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitor;
 import net.sf.jsqlparser.expression.operators.relational.ItemsList;
@@ -64,5 +67,34 @@ public class SubSelect implements FromItem, Expression, ItemsList {
 
 	public String toString() {
 		return "(" + selectBody + ")" + ((alias != null) ? " AS " + alias : "");
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		 if (obj == null)
+	            return false;
+	        if (obj == this)
+	            return true;
+	        if (!(obj instanceof SubSelect))
+	            return false;
+
+	        SubSelect rhs = (SubSelect) obj;
+	        return new EqualsBuilder().
+	            // if deriving: appendSuper(super.equals(obj)).
+	            append(alias, rhs.alias).
+	            append(selectBody.toString(), rhs.selectBody.toString()).
+	            isEquals();
+	}
+	
+	
+	@Override
+	
+		public int hashCode() {
+	        return new HashCodeBuilder(23452345, 67856787).
+	            append(alias).
+	            append(selectBody.toString()).
+	            toHashCode();
+	    
 	}
 }

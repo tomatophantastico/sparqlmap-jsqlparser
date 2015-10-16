@@ -22,6 +22,11 @@
 
 package net.sf.jsqlparser.expression;
 
+import net.sf.jsqlparser.schema.Table;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * A basic class for binary expressions, that is expressions having a left member and a right member which are in turn
  * expressions.
@@ -63,5 +68,29 @@ public abstract class BinaryExpression implements Expression {
 	}
 
 	public abstract String getStringExpression();
+	
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(leftExpression).append(rightExpression).append(not).build();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BinaryExpression other = (BinaryExpression) obj;
+		 return new EqualsBuilder()
+		                 .append(leftExpression,other.leftExpression)
+		                 .append(rightExpression, other.rightExpression)
+		                 .append(not, other.not)
+		                 .isEquals();
+		
+	
+	}
 
 }

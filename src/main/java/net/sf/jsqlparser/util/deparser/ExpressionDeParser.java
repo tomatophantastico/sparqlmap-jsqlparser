@@ -12,6 +12,7 @@ import net.sf.jsqlparser.expression.DateValue;
 import net.sf.jsqlparser.expression.DoubleValue;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitor;
+import net.sf.jsqlparser.expression.ExpressionWithString;
 import net.sf.jsqlparser.expression.ExtractExpression;
 import net.sf.jsqlparser.expression.Function;
 import net.sf.jsqlparser.expression.InverseExpression;
@@ -19,6 +20,7 @@ import net.sf.jsqlparser.expression.JdbcParameter;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NullValue;
 import net.sf.jsqlparser.expression.Parenthesis;
+import net.sf.jsqlparser.expression.StringExpression;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.TimeValue;
 import net.sf.jsqlparser.expression.TimestampValue;
@@ -223,6 +225,8 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
 		buffer.append("NULL");
 
 	}
+	
+	 
 
 	public void visit(OrExpression orExpression) {
 		visitBinaryExpression(orExpression, " OR ");
@@ -404,14 +408,6 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
 		visitBinaryExpression(bitwiseXor, " ^ ");
 	}
 
-	@Override
-	public void visit(CastExpression cast) {
-		buffer.append("CAST(");
-		buffer.append(cast.getLeftExpression());
-		buffer.append(" AS ");
-		buffer.append(cast.getTypeName());
-		buffer.append(")");
-	}
 
 	@Override
 	public void visit(Modulo modulo) {
@@ -423,8 +419,18 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
 		buffer.append(aexpr.toString());
 	}
 
+	
+
 	@Override
-	public void visit(ExtractExpression eexpr) {
-		buffer.append(eexpr.toString());
+	public void visit(ExpressionWithString ews) {
+		ews.getExpression().accept(this);
+		buffer.append(ews.getString());
+		
+	}
+
+	@Override
+	public void visit(StringExpression string) {
+		buffer.append(string.getString());
+		
 	}
 }

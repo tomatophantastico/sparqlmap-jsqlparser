@@ -20,18 +20,26 @@
  * Boston, MA 02111-1307, USA.
  */
 
+
 package net.sf.jsqlparser.schema;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitor;
+import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.statement.select.ColumnReference;
+import net.sf.jsqlparser.statement.select.ColumnReferenceVisitor;
 
 /**
- * A column. It can have the table name it belongs to.
+ * A column. It can have the table name it belongs to. 
  */
-public class Column implements Expression {
+public class Column implements Expression, ColumnReference {
 	private String columnName = "";
 	private Table table;
-
+	
 	public Column() {
 	}
 
@@ -39,7 +47,7 @@ public class Column implements Expression {
 		this.table = table;
 		this.columnName = columnName;
 	}
-
+	
 	public String getColumnName() {
 		return columnName;
 	}
@@ -55,30 +63,58 @@ public class Column implements Expression {
 	public void setTable(Table table) {
 		this.table = table;
 	}
-
+	
 	/**
-	 * @return the name of the column, prefixed with 'tableName' and '.'
+	 * @return the name of the column, prefixed with 'tableName' and '.' 
 	 */
 	public String getWholeColumnName() {
-
+		
 		String columnWholeName = null;
 		String tableWholeName = table.getWholeTableName();
-
+		
 		if (tableWholeName != null && tableWholeName.length() != 0) {
 			columnWholeName = tableWholeName + "." + columnName;
 		} else {
 			columnWholeName = columnName;
 		}
-
+		
 		return columnWholeName;
 
 	}
-
+	
 	public void accept(ExpressionVisitor expressionVisitor) {
 		expressionVisitor.visit(this);
 	}
 
-	public String toString() {
-		return getWholeColumnName();
+	public void accept(ColumnReferenceVisitor columnReferenceVisitor) {
+		columnReferenceVisitor.visit(this);
 	}
+
+
+	public String toString() {
+		return table.toString()  + "."+ columnName;
+	}
+
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(columnName).append(table).build();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Column other = (Column) obj;
+		 return new EqualsBuilder()
+		                 .append(columnName,other.columnName)
+		                 .append(table, other.table)		             
+		                 .isEquals();
+
+	}
+	
 }

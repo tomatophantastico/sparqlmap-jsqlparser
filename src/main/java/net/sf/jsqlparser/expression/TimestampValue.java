@@ -32,6 +32,10 @@ public class TimestampValue implements Expression {
 	public TimestampValue(String value) {
 		this.value = Timestamp.valueOf(value.substring(1, value.length() - 1));
 	}
+	
+	public TimestampValue(Timestamp d){
+		this.value = d;
+	}
 
 	public void accept(ExpressionVisitor expressionVisitor) {
 		expressionVisitor.visit(this);

@@ -19,21 +19,25 @@
  * library; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
+ 
 package net.sf.jsqlparser.schema;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.FromItem;
 import net.sf.jsqlparser.statement.select.FromItemVisitor;
 import net.sf.jsqlparser.statement.select.IntoTableVisitor;
 
 /**
- * A table. It can have an alias and the schema name it belongs to.
+ * A table. It can have an alias and the schema name it belongs to. 
  */
 public class Table implements FromItem {
 	private String schemaName;
 	private String name;
 	private String alias;
-
+	
 	public Table() {
 	}
 
@@ -41,7 +45,7 @@ public class Table implements FromItem {
 		this.schemaName = schemaName;
 		this.name = name;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -65,7 +69,7 @@ public class Table implements FromItem {
 	public void setAlias(String string) {
 		alias = string;
 	}
-
+	
 	public String getWholeTableName() {
 
 		String tableWholeName = null;
@@ -77,7 +81,7 @@ public class Table implements FromItem {
 		} else {
 			tableWholeName = name;
 		}
-
+		
 		return tableWholeName;
 
 	}
@@ -85,12 +89,46 @@ public class Table implements FromItem {
 	public void accept(FromItemVisitor fromItemVisitor) {
 		fromItemVisitor.visit(this);
 	}
-
+	
 	public void accept(IntoTableVisitor intoTableVisitor) {
 		intoTableVisitor.visit(this);
 	}
-
+	
+	
 	public String toString() {
-		return getWholeTableName() + ((alias != null) ? " AS " + alias : "");
+		
+		
+		//return alias!=null?alias:getWholeTableName();
+		return getWholeTableName()+((alias!=null)?" AS "+alias:"");
 	}
+
+	@Override
+	public int hashCode() {
+		int hash = new HashCodeBuilder().append(alias).append(name).build();
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Table other = (Table) obj;
+		
+		boolean isEqual = new EqualsBuilder()
+        .append(name,other.name)
+        .append(schemaName, other.schemaName)
+        .append(alias, other.alias)
+        .isEquals();
+		
+		 return isEqual;
+		
+	
+	}
+	
+	
+	
 }

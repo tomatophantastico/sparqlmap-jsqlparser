@@ -60,4 +60,13 @@ public class LongValue implements Expression {
 	public String toString() {
 		return getStringValue();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof LongValue){
+			return ((LongValue) obj).getStringValue().equals(this.getStringValue());
+		}
+		
+		return false;
+	}
 }

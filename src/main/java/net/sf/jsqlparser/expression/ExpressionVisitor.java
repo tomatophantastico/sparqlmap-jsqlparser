@@ -70,6 +70,8 @@ public interface ExpressionVisitor {
 	public void visit(Parenthesis parenthesis);
 
 	public void visit(StringValue stringValue);
+	
+	public void visit(StringExpression string);
 
 	public void visit(Addition addition);
 
@@ -127,11 +129,10 @@ public interface ExpressionVisitor {
 
 	public void visit(BitwiseXor bitwiseXor);
 	
-	public void visit(CastExpression cast);
 	
 	public void visit(Modulo modulo);
 	
 	public void visit(AnalyticExpression aexpr);
 	
-	public void visit(ExtractExpression eexpr);
+	public void visit(ExpressionWithString ews);
 }

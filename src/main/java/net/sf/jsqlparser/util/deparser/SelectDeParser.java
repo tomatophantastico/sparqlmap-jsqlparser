@@ -9,6 +9,8 @@ import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.AllColumns;
 import net.sf.jsqlparser.statement.select.AllTableColumns;
+import net.sf.jsqlparser.statement.select.ColumnIndex;
+import net.sf.jsqlparser.statement.select.ColumnReferenceVisitor;
 import net.sf.jsqlparser.statement.select.FromItem;
 import net.sf.jsqlparser.statement.select.FromItemVisitor;
 import net.sf.jsqlparser.statement.select.Join;
@@ -16,6 +18,7 @@ import net.sf.jsqlparser.statement.select.Limit;
 import net.sf.jsqlparser.statement.select.OrderByElement;
 import net.sf.jsqlparser.statement.select.OrderByVisitor;
 import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.SelectBodyString;
 import net.sf.jsqlparser.statement.select.SelectExpressionItem;
 import net.sf.jsqlparser.statement.select.SelectItem;
 import net.sf.jsqlparser.statement.select.SelectItemVisitor;
@@ -29,7 +32,7 @@ import net.sf.jsqlparser.statement.select.Top;
  * A class to de-parse (that is, tranform from JSqlParser hierarchy into a string) a
  * {@link net.sf.jsqlparser.statement.select.Select}
  */
-public class SelectDeParser implements SelectVisitor, OrderByVisitor, SelectItemVisitor, FromItemVisitor {
+public class SelectDeParser implements  SelectVisitor, OrderByVisitor, SelectItemVisitor, FromItemVisitor, ColumnReferenceVisitor {
 	protected StringBuilder buffer;
 	protected ExpressionVisitor expressionVisitor;
 
@@ -277,4 +280,16 @@ public class SelectDeParser implements SelectVisitor, OrderByVisitor, SelectItem
 			deparseLimit(list.getLimit());
 		}
 	}
+	
+	@Override
+	public void visit(ColumnIndex columnIndex) {
+		buffer.append(columnIndex.getIndex());
+	}
+
+	@Override
+	public void visit(SelectBodyString sbs) {
+		buffer.append(" " + sbs.getQuery() +" ");
+		
+	}
+
 }

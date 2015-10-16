@@ -571,23 +571,7 @@ public class SelectTest extends TestCase {
 		parserManager.parse(new StringReader(sql));
 	}
 
-	public void testCast() throws JSQLParserException {
-		String stmt = "SELECT CAST(a AS varchar) FROM tabelle1";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-		stmt = "SELECT CAST(a AS varchar2) FROM tabelle1";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-	}
-
-	public void testCastInCast() throws JSQLParserException {
-		String stmt = "SELECT CAST(CAST(a AS numeric) AS varchar) FROM tabelle1";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-	}
-
-	public void testCastInCast2() throws JSQLParserException {
-		String stmt = "SELECT CAST('test' + CAST(assertEqual AS numeric) AS varchar) FROM tabelle1";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-	}
-
+	
 	public void testCaseElseAddition() throws JSQLParserException {
 		String stmt = "SELECT CASE WHEN 1 + 3 > 20 THEN 0 ELSE 1000 + 1 END AS d FROM dual";
 		assertSqlCanBeParsedAndDeparsed(stmt);
@@ -702,31 +686,7 @@ public class SelectTest extends TestCase {
 		assertSqlCanBeParsedAndDeparsed(stmt);
 	}
 
-	public void testWithUnionProblem3() throws JSQLParserException {
-		String stmt = "WITH test AS ((SELECT mslink, CAST(tablea.fname AS varchar) FROM tablea INNER JOIN tableb ON tablea.mslink = tableb.mslink AND tableb.deleted = 0 WHERE tablea.fname IS NULL AND 1 = 0) UNION ALL (SELECT mslink FROM tableb)) SELECT * FROM tablea WHERE mslink IN (SELECT mslink FROM test)";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-	}
-
-	public void testWithUnionProblem4() throws JSQLParserException {
-		String stmt = "WITH hist AS ((SELECT gl.mslink, ba.gl_name AS txt, ba.gl_nummer AS nr, 0 AS level, CAST(gl.mslink AS VARCHAR) AS path, ae.feature FROM tablea AS gl INNER JOIN tableb AS ba ON gl.mslink = ba.gl_mslink INNER JOIN tablec AS ae ON gl.mslink = ae.mslink AND ae.deleted = 0 WHERE gl.parent IS NULL AND gl.mslink <> 0) UNION ALL (SELECT gl.mslink, ba.gl_name AS txt, ba.gl_nummer AS nr, hist.level + 1 AS level, CAST(hist.path + '.' + CAST(gl.mslink AS VARCHAR) AS VARCHAR) AS path, ae.feature FROM tablea AS gl INNER JOIN tableb AS ba ON gl.mslink = ba.gl_mslink INNER JOIN tablec AS ae ON gl.mslink = ae.mslink AND ae.deleted = 0 INNER JOIN hist ON gl.parent = hist.mslink WHERE gl.mslink <> 0)) SELECT mslink, space(level * 4) + txt AS txt, nr, feature, path FROM hist WHERE EXISTS (SELECT feature FROM tablec WHERE mslink = 0 AND ((feature IN (1, 2) AND hist.feature = 3) OR (feature IN (4) AND hist.feature = 2)))";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-	}
-
-	public void testWithUnionProblem5() throws JSQLParserException {
-		String stmt = "WITH hist AS ((SELECT gl.mslink, ba.gl_name AS txt, ba.gl_nummer AS nr, 0 AS level, CAST(gl.mslink AS VARCHAR) AS path, ae.feature FROM tablea AS gl INNER JOIN tableb AS ba ON gl.mslink = ba.gl_mslink INNER JOIN tablec AS ae ON gl.mslink = ae.mslink AND ae.deleted = 0 WHERE gl.parent IS NULL AND gl.mslink <> 0) UNION ALL (SELECT gl.mslink, ba.gl_name AS txt, ba.gl_nummer AS nr, hist.level + 1 AS level, CAST(hist.path + '.' + CAST(gl.mslink AS VARCHAR) AS VARCHAR) AS path, 5 AS feature FROM tablea AS gl INNER JOIN tableb AS ba ON gl.mslink = ba.gl_mslink INNER JOIN tablec AS ae ON gl.mslink = ae.mslink AND ae.deleted = 0 INNER JOIN hist ON gl.parent = hist.mslink WHERE gl.mslink <> 0)) SELECT * FROM hist";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-	}
-
-	public void testExtractFrom1() throws JSQLParserException {
-		String stmt = "SELECT EXTRACT(month FROM datecolumn) FROM testtable";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-	}
-
-	public void testExtractFrom2() throws JSQLParserException {
-		String stmt = "SELECT EXTRACT(year FROM now()) FROM testtable";
-		assertSqlCanBeParsedAndDeparsed(stmt);
-	}
-
+	
 	public void testProblemFunction() throws JSQLParserException {
 		String stmt = "SELECT test() FROM testtable";
 		assertSqlCanBeParsedAndDeparsed(stmt);

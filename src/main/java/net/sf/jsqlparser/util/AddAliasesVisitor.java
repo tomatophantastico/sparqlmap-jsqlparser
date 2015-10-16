@@ -5,6 +5,7 @@ import java.util.List;
 import net.sf.jsqlparser.statement.select.AllColumns;
 import net.sf.jsqlparser.statement.select.AllTableColumns;
 import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.SelectBodyString;
 import net.sf.jsqlparser.statement.select.SelectExpressionItem;
 import net.sf.jsqlparser.statement.select.SelectItem;
 import net.sf.jsqlparser.statement.select.SelectItemVisitor;
@@ -46,6 +47,11 @@ public class AddAliasesVisitor implements SelectVisitor, SelectItemVisitor {
 		for (PlainSelect select : setOpList.getPlainSelects()) {
 			select.accept(this);
 		}
+	}
+	
+	@Override
+	public void visit(SelectBodyString sbs) {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override

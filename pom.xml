@@ -3,23 +3,32 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.jsqlparser</groupId>
 	<artifactId>jsqlparser</artifactId>
-	<version>0.8.1-SNAPSHOT</version>
-	<name>clone of the jsqlparser library</name>
+	<version>0.8.1.SPARQLMAP-SNAPSHOT</version>
+	<name>clone of the jsqlparser library for sparqlmap</name>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
 		</dependency>
+				<dependency>
+			  <groupId>org.apache.commons</groupId>
+  <artifactId>commons-lang3</artifactId>
+  <version>3.1</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
-		<!-- use the following if you're not using a snapshot version. -->
 		<repository>
-			<id>jwall</id>
-			<name>jwall.org Maven Repository</name>
-			<url>https://secure.jwall.org/maven/repository/jwall</url>
+			<id>internal</id>
+			<name>AKSW Release Repo</name>
+			<url>http://maven.aksw.org/archiva/repository/internal/</url>
 		</repository>
+		<snapshotRepository>
+			<id>aksw.snapshots</id>
+			<name>AKSW Snapshot Repo</name>
+			<url>http://maven.aksw.org/archiva/repository/snapshots/</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 	<build>
@@ -67,6 +76,41 @@
 		        </configuration>
 		    </plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											javacc-maven-plugin
+										</artifactId>
+										<versionRange>
+											[2.6,)
+										</versionRange>
+										<goals>
+											<goal>javacc</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
